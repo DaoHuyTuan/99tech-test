@@ -3,11 +3,12 @@
 -- Insert tokens from JSON data
 INSERT INTO tokens (id, symbol, display_name, created_at)
 VALUES
+  (gen_random_uuid(), 'USDC', 'USD Coin', NOW()),
+  (gen_random_uuid(), 'ETH', 'Ethereum', NOW()),
   (gen_random_uuid(), 'BLUR', 'BLUR', NOW()),
   (gen_random_uuid(), 'bNEO', 'bNEO', NOW()),
   (gen_random_uuid(), 'BUSD', 'Binance USD', NOW()),
   (gen_random_uuid(), 'USD', 'US Dollar', NOW()),
-  (gen_random_uuid(), 'ETH', 'Ethereum', NOW()),
   (gen_random_uuid(), 'GMX', 'GMX', NOW()),
   (gen_random_uuid(), 'STEVMOS', 'STEVMOS', NOW()),
   (gen_random_uuid(), 'LUNA', 'Terra Luna', NOW()),
@@ -19,7 +20,6 @@ VALUES
   (gen_random_uuid(), 'ampLUNA', 'ampLUNA', NOW()),
   (gen_random_uuid(), 'KUJI', 'KUJI', NOW()),
   (gen_random_uuid(), 'STOSMO', 'STOSMO', NOW()),
-  (gen_random_uuid(), 'USDC', 'USD Coin', NOW()),
   (gen_random_uuid(), 'axlUSDC', 'Axelar USDC', NOW()),
   (gen_random_uuid(), 'ATOM', 'Cosmos', NOW()),
   (gen_random_uuid(), 'STATOM', 'STATOM', NOW()),

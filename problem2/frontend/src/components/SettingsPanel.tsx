@@ -20,10 +20,26 @@ export const SettingsPanel = ({
             <button
               key={option}
               className={`flex-1 px-4 py-2 border rounded-lg text-sm font-medium transition-all ${
-                slippage === option
-                  ? "bg-purple-600 text-white border-purple-600"
-                  : "bg-white border-gray-200 hover:border-purple-600"
+                slippage === option ? "text-white" : "bg-white border-gray-200"
               }`}
+              style={
+                slippage === option
+                  ? {
+                      backgroundColor: "#a89f21",
+                      borderColor: "#a89f21",
+                    }
+                  : undefined
+              }
+              onMouseEnter={(e) => {
+                if (slippage !== option) {
+                  e.currentTarget.style.borderColor = "#a89f21";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (slippage !== option) {
+                  e.currentTarget.style.borderColor = "";
+                }
+              }}
               onClick={() => onSlippageChange(option)}
             >
               {option}%
@@ -34,7 +50,13 @@ export const SettingsPanel = ({
             value={slippage}
             onChange={(e) => onSlippageChange(parseFloat(e.target.value) || 0)}
             placeholder="Custom"
-            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm max-w-[80px] focus:outline-none focus:border-purple-600"
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm max-w-[80px] focus:outline-none"
+            onFocus={(e) => {
+              e.target.style.borderColor = "#a89f21";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "";
+            }}
           />
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import type { Token } from "../types";
+import { TokenIcon } from "./TokenIcon";
 
 interface TokenInputProps {
   label: string;
@@ -53,13 +54,10 @@ const TokenSelectButton = ({ token, onClick }: TokenSelectButtonProps) => {
       onClick={onClick}
     >
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white font-semibold text-xs">
-          {token.symbol[0]}
-        </div>
+        <TokenIcon token={token} size={24} />
         <span className="font-medium">{token.symbol}</span>
         <ChevronDown className="w-4 h-4 text-gray-400" />
       </div>
     </button>
   );
 };
-

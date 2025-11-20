@@ -8,14 +8,17 @@ interface SocketError {
 
 interface UsePricingSocketOptions {
   url: string; // URL của socket server, ví dụ: 'http://localhost:3000'
-  tokenId: string;
+  pairs: {
+    fromId: string;
+    toId: string;
+  };
   onPricingUpdate?: (data: any) => void;
   onError?: (error: SocketError) => void;
 }
 
 export const usePricingSocket = ({
   url,
-  tokenId,
+  pairs,
   onPricingUpdate,
   onError,
 }: UsePricingSocketOptions) => {
@@ -35,6 +38,11 @@ export const usePricingSocket = ({
   }, [onError]);
 
   useEffect(() => {
+    // Chỉ connect và subscribe khi cả 2 id đều có giá trị
+    if (!pairs.fromId || !pairs.toId) {
+      return;
+    }
+
     // Tạo socket connection với namespace 'pricings'
     const socket = io(`${url}/pricings`, {
       transports: ["websocket"],
@@ -51,8 +59,9 @@ export const usePricingSocket = ({
       setIsConnected(true);
       setError(null);
 
-      // Subscribe to token khi connect thành công
-      socket.emit("subscribe", { tokenId });
+      // Subscribe to pairs khi connect thành công
+      const pairsString = `${pairs.fromId}/${pairs.toId}`;
+      socket.emit("subscribe", { pairs: pairsString });
     });
 
     // Handle disconnect
@@ -65,11 +74,12 @@ export const usePricingSocket = ({
     socket.on("reconnect", (attemptNumber) => {
       console.log("Socket reconnected after", attemptNumber, "attempts");
       // Re-subscribe sau khi reconnect
-      socket.emit("subscribe", { tokenId });
+      const pairsString = `${pairs.fromId}/${pairs.toId}`;
+      socket.emit("subscribe", { pairs: pairsString });
     });
 
     // Handle pricing updates
-    socket.on("pricingUpdate", (data) => {
+    socket.on("pricing:update", (data) => {
       onPricingUpdateRef.current?.(data);
     });
 
@@ -85,18 +95,20 @@ export const usePricingSocket = ({
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [url, tokenId]);
+  }, [url, pairs.fromId, pairs.toId]);
 
   // Function để manually re-subscribe (nếu cần)
   const resubscribe = useCallback(
-    (newTokenId?: string) => {
+    (newPairs?: { fromId: string; toId: string }) => {
       if (socketRef.current?.connected) {
+        const pairsToUse = newPairs || pairs;
+        const pairsString = `${pairsToUse.fromId}/${pairsToUse.toId}`;
         socketRef.current.emit("subscribe", {
-          tokenId: newTokenId || tokenId,
+          pairs: pairsString,
         });
       }
     },
-    [tokenId]
+    [pairs]
   );
 
   return {
