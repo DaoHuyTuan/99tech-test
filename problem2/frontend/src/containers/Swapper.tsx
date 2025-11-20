@@ -47,18 +47,15 @@ export const Swapper = () => {
       if (lastInputChanged.current === "from" && fromAmount) {
         calculateToAmount(fromAmount, data);
       } else if (lastInputChanged.current === "to" && toAmount) {
-        debugger;
         calculateFromAmount(toAmount, data);
       } else if (fromAmount && !toAmount) {
         lastInputChanged.current = "from";
         calculateToAmount(fromAmount, data);
       } else if (toAmount && !fromAmount) {
         lastInputChanged.current = "to";
-        debugger;
         calculateFromAmount(toAmount, data);
       } else if (fromAmount && toAmount) {
         if (lastInputChanged.current === "to") {
-          debugger;
           calculateFromAmount(toAmount, data);
         } else {
           calculateToAmount(fromAmount, data);
@@ -72,7 +69,6 @@ export const Swapper = () => {
 
   const calculateToAmount = useCallback(
     (fromValue: string, pricing?: PricingData) => {
-      debugger;
       const data = pricing || pricingData;
       if (!data || !data.pair1?.price || !data.pair2?.price) {
         return;
@@ -92,7 +88,6 @@ export const Swapper = () => {
 
   const calculateFromAmount = useCallback(
     (toValue: string, pricing?: PricingData) => {
-      debugger;
       const data = pricing || pricingData;
       if (!data || !data.pair1?.price || !data.pair2?.price) {
         return;
